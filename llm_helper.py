@@ -1,6 +1,4 @@
 import google.generativeai as genai
-from IPython.display import display
-from IPython.display import Markdown
 import textwrap
 import dotenv
 import os
@@ -14,10 +12,6 @@ class gemini_bot():
 
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel(model)
-        
-    def to_markdown(self, text: str):
-        text = text.replace('•', '  *')
-        return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
 
     def get_respondse(self, req: str):
         logging.info(f'Request: {req}')
