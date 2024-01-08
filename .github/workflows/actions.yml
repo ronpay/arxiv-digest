@@ -27,5 +27,7 @@ jobs:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          TO_EMAIL_ADDRESS: ${{ secrets.TO_EMAIL_ADDRESS }}
+          INTERESTS: ${{ vars.INTERESTS }}
         run: python main.py
       

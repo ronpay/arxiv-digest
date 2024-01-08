@@ -20,17 +20,24 @@ class gemini_bot():
         logging.info(f'Response: {resp}')
         return resp
 
-def get_selected_papers(bot, papers: list, interest: str):
+def get_selected_papers_aux(bot, papers: list, interest: str):
     prompt = 'Hello, I have a list of research papers, and I need help identifying which of them are relevant to a specific field of interest.'
     prompt += f'My field of interest is {interest}'
-    prompt += 'Below is the list of paper titles along with their abstracts:\n\n'
+    prompt += 'Below is the list of paper titles:\n\n'
     for i, paper in enumerate(papers):
         paper_info = f'{i}. Title: {paper["title"]}\n'
         prompt += paper_info
     prompt += '\n'
-    prompt += f'Could you please review each paper and provide me with the numbers of those papers that are relevant to the field of {interest}? Thank you!'
+    prompt += f'Could you please review each paper title and provide me with the numbers of those papers that are relevant to the field of {interest}? Thank you!'
     resp = bot.get_respondse(prompt)
     indexes = re.findall(r'\d+', resp)
     indexes = [int(i) for i in indexes]
     selected_papers = [papers[i] for i in indexes]
+    return selected_papers
+
+def get_selected_papers(bot, papers: list, interest: str):
+    # spilit papers to 50
+    selected_papers = []
+    for i in range(0, len(papers), 50):
+        selected_papers += get_selected_papers_aux(bot, papers[i:i+50], interest)
     return selected_papers

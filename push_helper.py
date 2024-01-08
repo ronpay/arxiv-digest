@@ -9,7 +9,7 @@ class email_pusher():
         load_dotenv()
         self.email = os.getenv('GMAIL_ADDRESS')
         self.password = os.getenv('GMAIL_PASSWORD')
-        self.to_email = os.getenv('TO_EMAIL', self.email)
+        self.to_email = os.getenv('TO_EMAIL_ADDRESS', self.email)
 
     def send_email(self, subject: str, body: str):
         logging.info(f'Sending email to {self.to_email}')
