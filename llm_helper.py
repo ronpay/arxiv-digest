@@ -30,7 +30,7 @@ def get_selected_papers_aux(bot, papers: list, interest: str):
         paper_info = f'{i}. Title: {paper["title"]}\n'
         prompt += paper_info
     prompt += '\n'
-    prompt += f'Could you please review each paper title and provide me with the numbers of those papers that are relevant to the field of {interest}? Thank you!'
+    prompt += f'Could you please review each paper title one by one carefully and provide me with the numbers of those papers that are relevant to the field of {interest}? Thank you!'
     resp = bot.get_respondse(prompt)
     indexes = re.findall(r'\d+', resp)
     indexes = [int(i) for i in indexes]
@@ -40,6 +40,6 @@ def get_selected_papers_aux(bot, papers: list, interest: str):
 def get_selected_papers(bot, papers: list, interest: str):
     # spilit papers to 50
     selected_papers = []
-    for i in range(0, len(papers), 50):
+    for i in range(0, len(papers), 30):
         selected_papers += get_selected_papers_aux(bot, papers[i:i+50], interest)
     return selected_papers
