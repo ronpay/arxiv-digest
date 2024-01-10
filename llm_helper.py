@@ -5,6 +5,8 @@ import os
 import re
 import logging
 
+logger = logging.getLogger('arxivdigest')
+
 class gemini_bot():
     def __init__(self, model='gemini-pro'):
         dotenv.load_dotenv()
@@ -14,10 +16,10 @@ class gemini_bot():
         self.model = genai.GenerativeModel(model)
 
     def get_respondse(self, req: str):
-        logging.info(f'Request: {req}')
+        logger.info(f'Request: {req}')
         resp = self.model.generate_content(req)
         resp = resp.text
-        logging.info(f'Response: {resp}')
+        logger.info(f'Response: {resp}')
         return resp
 
 def get_selected_papers_aux(bot, papers: list, interest: str):

@@ -17,19 +17,20 @@ from dotenv import load_dotenv
 # cs.SI - Social and Information Networks
 
 if __name__ == '__main__':
+    logger_init()
     load_dotenv()
     interests = os.getenv('INTERESTS')
-    logging.basicConfig(filename='arxivdigest.log', level=logging.INFO)
+    logger = logging.getLogger('arxivdigest')
     fields = ['cs.lg', 'cs.ai', 'cs.cv', 'cs.si']
     papers = []
     for field in fields:
         papers += get_papers(field)
-        logging.info(f'Number of papers in {field}: {len(papers)}')
+        logger.info(f'Number of papers in {field}: {len(papers)}')
     papers = deduplicate_dicts(papers, 'id')
     bot = gemini_bot()
     selected_papers = get_selected_papers(bot, papers, interests)
     selected_paper_ids = [paper['id'] for paper in selected_papers]
-    logging.info(f'Selected papers ids: {selected_paper_ids}')
+    logger.info(f'Selected papers ids: {selected_paper_ids}')
 
     content = str()
     for paper in selected_papers:

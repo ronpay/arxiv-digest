@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 import os
 import logging
 
+logger = logging.getLogger('arxivdigest')
+
 class email_pusher():
     def __init__(self):
         load_dotenv()
@@ -12,9 +14,9 @@ class email_pusher():
         self.to_email = os.getenv('TO_EMAIL_ADDRESS', self.email)
 
     def send_email(self, subject: str, body: str):
-        logging.info(f'Sending email to {self.to_email}')
-        logging.info(f'Email subject: {subject}')
-        logging.info(f'Email body: {body}')
+        logger.info(f'Sending email to {self.to_email}')
+        logger.info(f'Email subject: {subject}')
+        logger.info(f'Email body: {body}')
         msg = EmailMessage()
         msg['Subject'] = subject
         msg['From'] = self.email
@@ -23,6 +25,6 @@ class email_pusher():
         
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
             smtp.login(self.email, self.password)
-            logging.info(f'login successful')
+            logger.info(f'login successful')
             smtp.send_message(msg)
-            logging.info(f'email sent')
+            logger.info(f'email sent')
