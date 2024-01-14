@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as bs
 
+
 def get_papers(field: str):
     """
     Get all papers from the arXiv for a given field.

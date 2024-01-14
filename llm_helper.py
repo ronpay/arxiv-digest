@@ -30,7 +30,17 @@ def get_selected_papers_aux(bot, papers: list, interest: str):
         paper_info = f'{i}. Title: {paper["title"]}\n'
         prompt += paper_info
     prompt += '\n'
-    prompt += f'Could you please review each paper title one by one carefully and provide me with the numbers of those papers that are relevant to the field of {interest}? Thank you!'
+    prompt += f'You shoudl review each paper title one by one carefully. '
+    prompt += f'And select the papers that are relevant to the field of {interest}. '
+    prompt += f'The selection criteria include keyword matching of the title and in-depth analysis of the title before selection. '
+    # prompt += f'You should at least return a paper, even if there is no match, please return the most similar one.'
+    prompt += f'Return the list of papers which meet the requirement, in markdown list format.'
+    prompt += f'For examle, if you think paper 1, 3, 5 are relevant, you should return:\n\n'
+    prompt += f'1. Title: WildGEN: Long-horizon Trajectory Generation for Wildlife\n'
+    prompt += f'3. Title: Physics-informed Deep Learning to Solve Three-dimensional Terzaghi  Consolidation Equation: Forward and Inverse Problems\n'
+    prompt += f'5. Title: CoLafier: Collaborative Noisy Label Purifier With Local Intrinsic  Dimensionality Guidance\n'
+
+
     resp = bot.get_respondse(prompt)
     indexes = re.findall(r'\d+', resp)
     indexes = [int(i) for i in indexes]
@@ -40,6 +50,6 @@ def get_selected_papers_aux(bot, papers: list, interest: str):
 def get_selected_papers(bot, papers: list, interest: str):
     # spilit papers to 50
     selected_papers = []
-    for i in range(0, len(papers), 30):
+    for i in range(0, len(papers), 50):
         selected_papers += get_selected_papers_aux(bot, papers[i:i+50], interest)
     return selected_papers
