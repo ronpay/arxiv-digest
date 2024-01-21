@@ -32,6 +32,7 @@ if __name__ == '__main__':
     papers = random.sample(papers, len(papers))
     bot = gemini_bot()
     selected_papers = get_selected_papers(bot, papers, interests)
+    selected_papers = deduplicate_dicts(selected_papers, 'id')
     selected_paper_ids = [paper['id'] for paper in selected_papers]
     logger.info(f'Selected papers ids: {selected_paper_ids}')
 
