@@ -1,5 +1,5 @@
 from arxiv_helper import get_papers
-from llm_helper import get_selected_papers, gemini_bot
+from llm_helper import get_selected_papers, ChatLLM
 from utils import *
 from push_helper import email_pusher
 
@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 
 if __name__ == '__main__':
     logger_init()
-    load_dotenv()
+    load_dotenv(override=True)
     interests = os.getenv('INTERESTS')
     logger = logging.getLogger('arxivdigest')
     fields = ['cs.lg', 'cs.ai', 'cs.cv', 'cs.si']
@@ -27,7 +27,7 @@ if __name__ == '__main__':
         papers += get_papers(field)
         logger.info(f'Number of papers in {field}: {len(papers)}')
     papers = deduplicate_dicts(papers, 'id')
-    bot = gemini_bot()
+    bot = ChatLLM(model=os.getenv('LLM_MODEL'))
     selected_papers = get_selected_papers(bot, papers, interests)
     selected_paper_ids = [paper['id'] for paper in selected_papers]
     logger.info(f'Selected papers ids: {selected_paper_ids}')

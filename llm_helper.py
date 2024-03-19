@@ -1,24 +1,54 @@
 import google.generativeai as genai
+from openai import OpenAI
+
 import textwrap
 import dotenv
 import os
 import re
 import logging
 
+
 logger = logging.getLogger('arxivdigest')
 
-class gemini_bot():
-    def __init__(self, model='gemini-pro'):
-        dotenv.load_dotenv()
-        api_key = os.getenv('GOOGLE_API_KEY')
+class ChatLLM():
+    def __init__(self, model: str | None):
+        if model == None:
+            model = 'gemini-pro'
+        if 'gpt' in model:
+            self.api_key = os.getenv('OPENAI_API_KEY')
+            api_base = os.getenv('OPENAI_API_BASE')
+            self.api_base = os.getenv('OPENAI_API_BASE')
+        elif 'gemini' in model:
+            self.api_key = os.getenv('GOOGLE_API_KEY')
+        else:
+            raise ValueError('Un-support model!')
+        self.model = model
+    
+    def _chat_gpt(self, req: str):
+        client = OpenAI(
+            api_key=self.api_key,
+            base_url=self.api_base
+        )
+        completion = client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {'role': 'user', 'content': req}
+            ]
+        )
+        resp = completion.choices[0].message.content
+        return resp
 
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(model)
+    def _chat_gemini(self, req: str):
+        resp = genai.GenerativeModel(self.model).generate_content(req)
+        resp = resp.text
+        return resp
 
     def get_respondse(self, req: str):
         logger.info(f'Request: {req}')
-        resp = self.model.generate_content(req)
-        resp = resp.text
+        if 'gpt' in self.model:
+            resp = self._chat_gpt(req)
+        elif 'gemini' in self.model:
+            resp = self._chat_gemini(req)
         logger.info(f'Response: {resp}')
         return resp
 
