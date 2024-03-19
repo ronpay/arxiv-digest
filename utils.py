@@ -1,5 +1,6 @@
 import logging
 import sys
+import re
 
 def deduplicate_dicts(dict_list, key):
     seen = set()
@@ -22,3 +23,27 @@ def logger_init():
     stdout_handler.setFormatter(formatter)
 
     logger.addHandler(stdout_handler)
+
+def jaccard_similarity(set1, set2):
+    intersection = len(set1.intersection(set2))
+    union = len(set1.union(set2))
+    return intersection / union if union != 0 else 0
+
+def tokenize(text):
+    text = re.sub(r'\W+', ' ', text).lower()
+    return set(text.split())
+
+def find_most_similar_paper_jaccard(paper_list, paper):
+    paper_set = tokenize(paper)
+
+    max_similarity = 0
+    most_similar_paper = None
+
+    for current_paper in paper_list:
+        current_paper_set = tokenize(current_paper['title'])
+        similarity = jaccard_similarity(paper_set, current_paper_set)
+        if similarity > max_similarity:
+            max_similarity = similarity
+            most_similar_paper = current_paper
+
+    return most_similar_paper

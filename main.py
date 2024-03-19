@@ -5,6 +5,7 @@ from push_helper import email_pusher
 
 import os
 import logging
+import random
 
 from datetime import datetime
 from dotenv import load_dotenv
@@ -24,11 +25,14 @@ if __name__ == '__main__':
     fields = ['cs.lg', 'cs.ai', 'cs.cv', 'cs.si']
     papers = []
     for field in fields:
-        papers += get_papers(field)
-        logger.info(f'Number of papers in {field}: {len(papers)}')
+        papers_fieeld = get_papers(field)
+        papers += papers_fieeld
+        logger.info(f'Number of papers in {field}: {len(papers_fieeld)}')
     papers = deduplicate_dicts(papers, 'id')
     bot = ChatLLM(model=os.getenv('LLM_MODEL'))
+    papers = random.sample(papers, len(papers))
     selected_papers = get_selected_papers(bot, papers, interests)
+    selected_papers = deduplicate_dicts(selected_papers, 'id')
     selected_paper_ids = [paper['id'] for paper in selected_papers]
     logger.info(f'Selected papers ids: {selected_paper_ids}')
 
