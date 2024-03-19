@@ -14,7 +14,7 @@ logger = logging.getLogger('arxivdigest')
 
 class ChatLLM():
     def __init__(self, model: str | None):
-        if model == None:
+        if model is None:
             model = 'gemini-pro'
         if 'gpt' in model:
             self.api_key = os.getenv('OPENAI_API_KEY')
