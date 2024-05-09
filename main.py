@@ -22,7 +22,7 @@ if __name__ == '__main__':
     load_dotenv(override=True)
     interests = os.getenv('INTERESTS')
     logger = logging.getLogger('arxivdigest')
-    fields = ['cs.lg', 'cs.ai', 'cs.cv', 'cs.si']
+    fields = ['cs.LG', 'cs.AI', 'cs.CV', 'cs.SI', 'stat.ML']
     papers = []
     for field in fields:
         papers_fieeld = get_papers(field)
