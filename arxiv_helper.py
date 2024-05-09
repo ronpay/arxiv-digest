@@ -1,5 +1,7 @@
 import requests
+import re
 from bs4 import BeautifulSoup as bs
+
 
 
 def get_papers(field: str):
@@ -19,8 +21,8 @@ def get_papers(field: str):
     papers = []
     for dt, dd in zip(new_subs.find_all('dt'), new_subs.find_all('dd')):
         paper = {}
-        paper['id'] = dt.text.strip().split(" ")[2].split(":")[-1]
-        paper['title'] = dd.find("div", {"class": "list-title mathjax"}).text.replace("Title: ", "").strip()
+        paper['id'] = re.search(r"arXiv:(\d{4}\.\d{5})", dt.text, re.DOTALL).group(1)
+        paper['title'] = re.search(r"Title:\s*(.*)", dd.find("div", {"class": "list-title mathjax"}).text).group(1).strip()
         paper['authors'] = dd.find("div", {"class": "list-authors"}).text.replace("Authors:\n", "").replace("\n", "").strip()
         paper['subjects'] = dd.find("div", {"class": "list-subjects"}).text.replace("Subjects: ", "").strip()
         try:

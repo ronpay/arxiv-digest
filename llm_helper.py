@@ -18,7 +18,6 @@ class ChatLLM():
             model = 'gemini-pro'
         if 'gpt' in model:
             self.api_key = os.getenv('OPENAI_API_KEY')
-            api_base = os.getenv('OPENAI_API_BASE')
             self.api_base = os.getenv('OPENAI_API_BASE')
         elif 'gemini' in model:
             self.api_key = os.getenv('GOOGLE_API_KEY')
