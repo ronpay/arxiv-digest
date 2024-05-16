@@ -1,5 +1,7 @@
 # arxiv-digest
 
+![Daily arXiv Digest workflow](https://github.com/ronpay/arxiv-digest/actions/workflows/actions.yml/badge.svg)
+
 ## Introduction
 
 arxiv-digest is a specialized tool designed for AI enthusiasts and researchers. It offers an **automated way** to stay updated with the latest AI research papers from arXiv.
